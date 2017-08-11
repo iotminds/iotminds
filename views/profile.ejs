@@ -1,0 +1,70 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+<head>
+	<title>IoT Minds Profile</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+    	<div class="container-fluid">
+    		<div class="navbar-header">
+      			<a class="navbar-brand" href="/">IoT Minds</a>
+    		</div>
+    		<div class="navbar-content">
+      			<ul class="nav navbar-nav navbar-left">
+      				<li><a href="#">Channels</a></li>
+      				<li><a href="#">Documentation</a></li>
+      				<li><a href="#">Support</a></li>
+      			</ul>
+      			<ul class="nav navbar-nav navbar-right">
+      				<li><a href="/logout">Logout</a>     				
+      			</ul>    			
+    		</div>
+    	</div>
+    </nav>
+	<div class="container">
+		<div class="row">
+			<!-- LOCAL INFORMATION -->
+			<div class="col-sm-12">
+				<div style="padding-top: 5px; padding-bottom: 25px;" align="center" class="well">
+					<h3><%= user.username %></h3>
+					<h5>Kanalin aciklamasi burada yer alacak arkadaslar</h5>
+					<div style="padding-top: 10px;">
+						<a href="/profile" class="btn btn-primary" role="button">My Channels</a>
+						<a href="/channels/new" class="btn btn-primary" role="button">Create Channel</a>
+						<a href="" class="btn btn-primary" role="button">Edit Profile</a>
+						<a href="" class="btn btn-primary" role="button">Get API Keys</a>
+					</div>
+				</div>
+			</div>
+			<!-- TO DO LISTING AREA-->
+			<div class="col-sm-12">
+					<% channels.forEach(function(channel){ %>
+						<div class="col-md-4">
+							<div class="thumbnail">
+								<img src="<%= channel.image_url %>" alt="<%= channel.name %>">
+								<div class="caption">
+									<h3 align="center"><%= channel.name %></h3>
+									<h5 align="center"><%= channel.created_at %></h5>
+									<p><%= channel.description %></p>
+									<p align="center">
+										<a href="/channels/<%= channel.id %>" class="btn btn-primary" role="button">Visit</a> 
+										<a href="#" class="btn btn-default" role="button">Edit</a>
+										<a href="/channels/delete?id=<%= channel.id %>" class="btn btn-danger" role="button">Delete</a>
+									</p>
+								</div>
+							</div>
+					</div>
+					<% }); %>
+			</div>
+		</div>
+	</body>
+	</html>
