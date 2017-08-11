@@ -1,10 +1,10 @@
 // config/database.js
 module.exports = {
     'connection': {
-        'host': 'localhost',
-        'user': 'root',
-        'password': ''
+        'host': '109.232.216.219',
+        'user': 'serbestk_iot',
+        'password': 'i1997bt'
     },
-	'database': 'leblebin',
+	'database': 'serbestk_iotminds',
     'users_table': 'users'
 };

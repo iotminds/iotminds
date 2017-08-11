@@ -1,10 +1,10 @@
 //Please update your database info here
 var mysql = require("mysql")
 var db_config = {
-	host	: '127.0.0.1',
-	user	: 'root',
-	password: '',
-	database: 'leblebin'
+	host	: '109.232.216.219',
+	user	: 'serbestk_iot',
+	password: 'i1997bt',
+	database: 'serbestk_iotminds'
 }
 
 var connection
