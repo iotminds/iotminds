@@ -60,7 +60,7 @@ router.get("/:channel_id",function (req,res) {
 	var datas
 	db.query("SELECT * FROM channels WHERE id=?",[channel_id],function (err,result) {
 		if(err){
-			res.json({code:400,message:"DB_ERROR"})
+			res.json(err)
 		}else{
 			if(result.length>0){
 				name=result[0].name
