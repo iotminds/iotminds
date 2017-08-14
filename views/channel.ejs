@@ -91,6 +91,15 @@
 					</div>
 
 					<div id="manage" class="tab-pane fade">
+						<div class="container">
+							<h2>Usage of API</h2>
+							<h4>Update Component</h4>
+							<p>
+								To update component datas you can send GET request.
+							</p>
+							<code>GET http://iotminds.herokuapp.com/api/update?api_key=[YOUR_API_KEY]&value=1</code>
+						</div>
+
 						<table class="table">
 							<thead>
 								<tr>
@@ -118,7 +127,7 @@
 							var tmp
 							$.ajax({
 								'async': false,
-								'url': "http://localhost:8080/channels/components/<%=component.id%>",
+								'url': "http://iotminds.herokuapp.com/channels/components/<%=component.id%>",
 								'type': "GET",
 								'success': function (data) {
 									tmp = data
