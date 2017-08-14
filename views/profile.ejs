@@ -13,41 +13,52 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-    <nav class="navbar navbar-inverse">
-    	<div class="container-fluid">
-    		<div class="navbar-header">
-      			<a class="navbar-brand" href="/">IoT Minds</a>
-    		</div>
-    		<div class="navbar-content">
-      			<ul class="nav navbar-nav navbar-left">
-      				<li><a href="#">Channels</a></li>
-      				<li><a href="#">Documentation</a></li>
-      				<li><a href="#">Support</a></li>
-      			</ul>
-      			<ul class="nav navbar-nav navbar-right">
-      				<li><a href="/logout">Logout</a>     				
-      			</ul>    			
-    		</div>
-    	</div>
-    </nav>
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="/">IoT Minds</a>
+			</div>
+			<div class="navbar-content">
+				<ul class="nav navbar-nav navbar-left">
+					<li><a href="#">Channels</a></li>
+					<li><a href="#">Documentation</a></li>
+					<li><a href="#">Support</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/logout">Logout</a></li>				
+				</ul>    			
+			</div>
+		</div>
+	</nav>
+
 	<div class="container">
 		<div class="row">
 			<!-- LOCAL INFORMATION -->
 			<div class="col-sm-12">
-				<div style="padding-top: 5px; padding-bottom: 25px;" align="center" class="well">
+				<div style="padding-top: 5px; padding-left:25px; padding-bottom: 25px;" class="well">
 					<h3><%= user.username %></h3>
-					<h5>Kanalin aciklamasi burada yer alacak arkadaslar</h5>
 					<div style="padding-top: 10px;">
-						<a href="/profile" class="btn btn-primary" role="button">My Channels</a>
-						<a href="/channels/new" class="btn btn-primary" role="button">Create Channel</a>
 						<a href="" class="btn btn-primary" role="button">Edit Profile</a>
 						<a href="" class="btn btn-primary" role="button">Get API Keys</a>
 					</div>
 				</div>
 			</div>
-			<!-- TO DO LISTING AREA-->
 			<div class="col-sm-12">
-					<% channels.forEach(function(channel){ %>
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#home">My Channels</a></li>
+					<li><a data-toggle="tab" href="#create_channel">Create New Channel</a></li>
+					<li><a data-toggle="tab" href="#sharing">Sharing</a></li>
+					<li><a data-toggle="tab" href="#edit_profile">Edit Profile</a></li>
+					<li><a data-toggle="tab" href="#manage">API Keys</a></li>
+				</ul>
+			</div>
+			<div class="tab-content">
+				<div id="home" class="tab-pane fade in active">
+					<div class="col-sm-12">
+						<% if (channels[0] == null) {%>
+							<h5>You can create new channel by using "Create New Channel" tab.</h5>
+						<%}%>
+						<% channels.forEach(function(channel){ %>
 						<div class="col-md-4">
 							<div class="thumbnail">
 								<img src="<%= channel.image_url %>" alt="<%= channel.name %>">
@@ -62,9 +73,48 @@
 									</p>
 								</div>
 							</div>
+						</div>
+						<% }); %>
+					</div>			
+				</div>
+				<div id="create_channel" class="tab-pane fade">
+					<div class="col-sm-6 col-sm-offset-3">
+						<h1><span class="fa fa-sign-in"></span> Create a new Channel</h1>
+
+						<!-- show any messages that come back with authentication -->
+						<!-- LOGIN FORM -->
+						<form action="/channels/new" method="post">
+							<div class="form-group">
+								<label>Channel Name</label>
+								<input type="text" class="form-control" name="channel_name">
+							</div>
+							<div class="form-group">
+								<label>Channel Description</label>
+								<input type="text" class="form-control" name="channel_description">
+							</div>
+							<div class="form-group">
+								<label>Channel Image URL</label>
+								<input type="text" class="form-control" name="img_url">
+							</div>
+
+							<button type="submit" class="btn btn-success btn-lg">Create</button>
+						</form>
+
+						<hr>
 					</div>
-					<% }); %>
+				</div>
+				<div id="sharing" class="tab-pane fade">
+					Statistics is going here please wait
+				</div>
+				<div id="edit_profile" class="tab-pane fade">
+					Profile editing zone
+				</div>
+
+				<div id="manage" class="tab-pane fade">
+
+				</div>
+
+				<!-- COMPONENT LISTING AREA-->
 			</div>
-		</div>
-	</body>
-	</html>
+		</body>
+		</html>

@@ -1,5 +1,8 @@
 Yapilacaklar
 
+[FRONTEND]
+
+NULL kontrollerini yap
 Password en az 6 karakter olmali
 Kullanici email bilgisini de kaydetmemiz gerek
 Channel Image yerine youtube videosu veya stock bir resim
@@ -9,3 +12,8 @@ Ajax nimetlerinden faydalanarak anlik olarak guncelleme yapilacak(real time)
 API tekrardan dizayn edilecek ve kodlar temize cekilecek
 Kodlara comment eklenecek
 Karsilama sayfasi mobile uyumlu hale getirilip icerik eklenecek
+
+[BACKEND]
+
+Componenti silme ozelligi eklenecek
+

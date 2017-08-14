@@ -21,7 +21,7 @@ router.get("/update",function (req,res) {
 			channel_id = result[0].channel_id
 			db.query("INSERT INTO datas (value,component_id,channel_id) VALUES(?,?,?)",[value,component_id,channel_id],function (err,result) {
 				if (err) {
-					res.json(err)
+					res.json({code:400,message:"DB_ERROR"})
 				}else{
 					res.json({code:200,message:"SUCCESSFULLY_ADDED"})
 				}

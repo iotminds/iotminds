@@ -47,12 +47,16 @@
 						<li class="active"><a data-toggle="tab" href="#home">Dashboard</a></li>
 						<li><a data-toggle="tab" href="#create_component">Create New Component</a></li>
 						<li><a data-toggle="tab" href="#statistics">Statistics</a></li>
-						<li><a data-toggle="tab" href="#api_keys">API Keys</a></li>
+						<li><a data-toggle="tab" href="#manage">API Keys</a></li>
 					</ul>
 				</div>
 				<div class="tab-content">
+					<!--CHANNEL LISTING-->
 					<div id="home" class="tab-pane fade in active">
 						<div style="margin-top: 25px;" class="col-sm-12">
+							<% if(components[0]==null){%>
+								<h5>You can add new component to your channel by using "Create New Component" tab</h5>
+							<%}%>
 							<% components.forEach(function(component){ %>
 							<div class="col-md-4">
 								<div class="thumbnail">
@@ -67,7 +71,7 @@
 							<% }); %>
 						</div>						
 					</div>
-					<!-- COMPONENT LISTING AREA-->
+
 					<div id="create_component" class="tab-pane fade">
 						<div class="col-sm-6 col-sm-offset-3">
 							<h1><span class="fa fa-sign-in"></span> Create a new Component</h1>
@@ -86,13 +90,13 @@
 						Statistics is going here please wait
 					</div>
 
-					<div id="api_keys" class="tab-pane fade">
+					<div id="manage" class="tab-pane fade">
 						<table class="table">
 							<thead>
 								<tr>
 									<th> Component Name </th>
 									<th> API Key </th>
-									<th> Regenerate New Key</th>
+									<th> Manage</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -101,7 +105,7 @@
 								<tr>
 									<td><%=component.name%></td>
 									<td><%=component.api_key%></td>
-									<td><button class="btn btn-success">Regenerate</button>
+									<td align="center"><button class="btn btn-success btn-disabled">Regenerate new api key</button><button class="btn btn-danger">Delete</button></td>
 								</tr>
 
 								<% }) %>
