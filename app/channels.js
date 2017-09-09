@@ -109,7 +109,7 @@ router.post("/:channel_id/new_component",isLoggedIn,function (req,res) {
 	var type = req.body.type
 	var api_key = crypto.randomBytes(16).toString('hex')
 
-	db.query("INSERT INTO components (channel_id,name,created_at,last_updated,api_key) VALUES(?,?,NOW(),NOW(),?)",[channel_id,component_name,api_key],function (err,result) {
+	db.query("INSERT INTO components (channel_id,name,created_at,last_updated,api_key,type) VALUES(?,?,NOW(),NOW(),?,?)",[channel_id,component_name,api_key,type],function (err,result) {
 		if (err) {
 			res.json(err)
 		}else{
@@ -127,7 +127,7 @@ router.post("/:channel_id/new_component",isLoggedIn,function (req,res) {
 
 })
 
-router.get("/components/:component_id",isLoggedIn,function (req,res) {
+router.get("/components/:component_id",function (req,res) {
 	var component_id = req.params.component_id
 	db.query("SELECT value FROM datas WHERE component_id = ?",[component_id],function (err,result) {
 		if(err){
@@ -141,6 +141,71 @@ router.get("/components/:component_id",isLoggedIn,function (req,res) {
 		}
 	})
 })
+
+router.get("/components/delete/:component_id",isLoggedIn,function (req,res) {
+	var component_id = req.params.component_id
+	var channel_id
+	db.query("SELECT * FROM components WHERE id=?",[component_id],function (err,result) {
+		if(err){
+			res.json(err)
+		}else{
+			channel_id=result[0].channel_id
+		}
+	})
+	db.query("DELETE FROM datas WHERE component_id=?",[component_id],function (err,result) {
+		if(err){
+			res.json(err)
+		}else{
+			db.query("DELETE FROM api_keys WHERE component_id=?",[component_id],function (err,result) {
+				if(err){
+					res.json(err)
+				}else{
+					db.query("DELETE FROM components WHERE id=?",[component_id],function (err,result) {
+						res.redirect("/channels/"+channel_id+"#home")
+					})
+				}
+			})
+		}
+	})
+})
+
+router.get("/regenerate/:component_id",isLoggedIn,function (req,res) {
+	var component_id = req.params.component_id
+	var new_api_key = crypto.randomBytes(16).toString('hex')
+
+	db.query("UPDATE api_keys SET api_key=? WHERE component_id=?",[new_api_key,component_id],function (err,result) {
+		if(err){
+			res.json(err)
+		}else{
+			res.json(result)
+		}
+	})
+/*	db.query("SELECT * FROM api_keys WHERE component_id=?",[component_id],function (err,result) {
+		if(err){
+			res.json(err)
+		}else{
+			var owner_id = result[0].owner_id
+			var channel_id = result[0].channel_id
+			var api_key = crypto.randomBytes(16).toString('hex')
+
+			db.query("DELETE FROM api_keys WHERE component_id=?",[component_id],function (err,result) {
+				if(err){
+					res.json(err)
+				}else{
+					db.query("INSERT INTO api_keys (api_key,owner_id,channel_id) VALUES(?,?,?)",[api_key,owner_id,channel_id],function (err,result) {
+						if(err){
+							res.json(err)
+						}else{
+							res.redirect("/channels")
+						}
+					})
+				}
+			})
+		}
+	})
+*/
+})
+
 
 function isLoggedIn(req, res, next) {
 

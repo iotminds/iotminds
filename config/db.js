@@ -1,10 +1,10 @@
 //Please update your database info here
 var mysql = require("mysql")
 var db_config = {
-	host	: 'sql8.freesqldatabase.com',
-	user	: 'sql8189956',
-	password: 'XzNwbfAThg',
-	database: 'sql8189956'
+	host	: '91.227.6.16',
+	user	: 'btahtaci_iotmind',
+	password: '1997.burakT',
+	database: 'btahtaci_iotminds'
 }
 
 var connection

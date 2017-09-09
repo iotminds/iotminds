@@ -51,7 +51,7 @@ module.exports = function(app, passport) {
 		successRedirect : '/profile', // redirect to the secure profile section
 		failureRedirect : '/signup', // redirect back to the signup page if there is an error
 		failureFlash : true // allow flash messages
-	}));
+	}))
 
 	// =====================================
 	// PROFILE SECTION =========================
@@ -79,10 +79,16 @@ module.exports = function(app, passport) {
 		req.logout();
 		res.redirect('/');
 	});
-
+	app.get("/docs",function (req,res) {
+		res.render("documentation")
+	})
+	app.get("/support",function (req,res) {
+		res.render("support")
+	})
 	app.get("/*",function (req,res) {
 		res.render("404")
 	})
+
 };
 
 // route middleware to make sure

@@ -1,10 +1,10 @@
 // config/database.js
 module.exports = {
     'connection': {
-        'host': 'sql8.freesqldatabase.com',
-        'user': 'sql8189956',
-        'password': 'XzNwbfAThg'
+        'host': '91.227.6.16',
+        'user': 'btahtaci_iotmind',
+        'password': '1997.burakT'
     },
-	'database': 'sql8189956',
+	'database': 'btahtaci_iotminds',
     'users_table': 'users'
 };

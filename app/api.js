@@ -19,13 +19,25 @@ router.get("/update",function (req,res) {
 			}
 			component_id = result[0].component_id
 			channel_id = result[0].channel_id
-			db.query("INSERT INTO datas (value,component_id,channel_id) VALUES(?,?,?)",[value,component_id,channel_id],function (err,result) {
+			db.query("INSERT INTO datas (value,component_id,channel_id,created_at) VALUES(?,?,?,NOW())",[value,component_id,channel_id],function (err,result) {
 				if (err) {
 					res.json({code:400,message:"DB_ERROR"})
 				}else{
 					res.json({code:200,message:"SUCCESSFULLY_ADDED"})
 				}
 			})
+		}
+	})
+})
+
+router.get("/channels",function (req,res) {
+	var user_id = req.query.user_sid
+
+	db.query("SELECT * FROM channels WHERE owner_id = ?",[user_id],function (result,err) {
+		if (err) {
+			res.json(err)
+		}else{
+			res.json(result)
 		}
 	})
 })
