@@ -1,10 +1,10 @@
 // config/database.js
 module.exports = {
     'connection': {
-        'host': 'btahtaci.com',
-        'user': 'btahtaci_iotmind',
-        'password': '1997.burakT'
+        'host': 'p1us8ottbqwio8hv.cbetxkdyhwsb.us-east-1.rds.amazonaws.com	',
+        'user': 'cpfj0qoqkan4uwgq',
+        'password': 'piogex7okldf7qaz'
     },
-	'database': 'btahtaci_iotminds',
+	'database': 'iotminds',
     'users_table': 'users'
 };
