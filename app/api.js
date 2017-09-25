@@ -1,73 +1,102 @@
 var express = require("express")
 var router = express.Router()
 var db = require("../config/db.js")
+var utilities = require("./utilities.js")
 
 router.get("/update",function (req,res) {
-	var api_key = req.query.api_key
-	console.log(api_key)
+	var key = req.query.key
 	var value = req.query.value
-	var component_id
-	var channel_id
 
-	db.query("SELECT * FROM api_keys WHERE api_key=?",[api_key],function (err,result) {
-		if(err){
-			res.send("andajsdnaklsdmasd")
-		}else{
-			if(!result[0]){
-				res.json({code:401,message:"INVALID_API_KEY"})
-				return
-			}
-			component_id = result[0].component_id
-			channel_id = result[0].channel_id
-			db.query("INSERT INTO datas (value,component_id,channel_id,created_at) VALUES(?,?,?,NOW())",[value,component_id,channel_id],function (err,result) {
-				if (err) {
-					res.json({code:400,message:"DB_ERROR"})
-				}else{
-					res.json({code:200,message:"SUCCESSFULLY_ADDED"})
-				}
-			})
-		}
+	if(!key || !value)
+		return utilities.printError(res, "Invalid arguments")
+
+	utilities.getKeyInfo(key, function(err, key_info) {
+		if(err)
+			return utilities.printError(res, err)
+
+		if(!utilities.checkKey(key_info, utilities.accessConstants.COMPONENT_WRITE))
+			return utilities.printError(res, "Insufficient privileges")
+
+		update_result = utilities.updateComponent(key_info.component_id, key_info.channel_id, value)
+
+		if(update_result instanceof Error)
+            return utilities.printError(res, update_result)
+
+		utilities.printSuccess(res)
 	})
 })
 
 router.get("/channels",function (req,res) {
-	var user_id = req.query.user_sid
+	var key = req.query.key
 
-	db.query("SELECT * FROM channels WHERE owner_id = ?",[user_id],function (result,err) {
-		if (err) {
-			res.json(err)
-		}else{
-			res.json(result)
-		}
+	if(!key)
+		return utilities.printError(res, "Invalid arguments")
+
+	utilities.getKeyInfo(key, function(err, key_info)
+	{
+        if(err)
+            return utilities.printError(res, err)
+
+        if(!utilities.checkKey(key_info, utilities.accessConstants.CHANNEL_LIST))
+            return utilities.printError(res, "Insufficient privileges")
+
+        utilities.getChannels(key_info.user_id, function(err, result)
+		{
+            if(err)
+                return utilities.printError(res, err)
+
+            utilities.printSuccess(res, result)
+        })
 	})
 })
 
-router.get("/retrieve",function (req,res) {
-	var api_key = req.query.api_key
-	var component_id
+router.get("/components", function(req, res)
+{
+    var key = req.query.key
 
-	db.query("SELECT * FROM api_keys WHERE api_key=?",[api_key],function (err,result) {
-		if(err){
-			res.json({code:400,message:"DB_ERROR"})
-		}else{
-			if(!result[0]){
-				res.json({code:401,message:"INVALID_API_KEY"})
-				return
-			}
-			component_id = result[0].component_id
-			db.query("SELECT * FROM datas WHERE component_id=?",[component_id],function (err,result) {
-				if(err){
-					res.json({code:400,message:"DB_ERROR"})
-				}else{
-					if(!result[0]){
-						res.json({code:400,message:"CAN_NOT_FIND_ENTRIES"})
-					}else{
-						res.json(result)
-					}
-				}
-			})
-		}
-	})
+    if(!key)
+        return utilities.printError(res, "Invalid arguments")
+
+    utilities.getKeyInfo(key, function(err, key_info)
+    {
+        if(err)
+            return utilities.printError(res, err)
+
+        if(!utilities.checkKey(key_info, utilities.accessConstants.COMPONENT_LIST))
+            return utilities.printError(res, "Insufficient privileges")
+
+        utilities.getComponents(key_info.channel_id, function(err, result)
+        {
+            if(err)
+                return utilities.printError(res, err)
+
+            utilities.printSuccess(res, result)
+        })
+    })
+})
+
+router.get("/retrieve",function (req,res) {
+    var key = req.query.key
+
+    if(!key)
+        return utilities.printError(res, "Invalid arguments")
+
+    utilities.getKeyInfo(key, function(err, key_info)
+    {
+        if(err)
+            return utilities.printError(res, err)
+
+        if(!utilities.checkKey(key_info, utilities.accessConstants.COMPONENT_READ))
+            return utilities.printError(res, "Insufficient privileges")
+
+        utilities.getComponentData(key_info.component_id, function(err, result)
+        {
+            if(err)
+                return utilities.printError(res, err)
+
+            utilities.printSuccess(res, result)
+        })
+    })
 })
 
 function isLoggedIn(req, res, next) {

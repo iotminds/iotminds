@@ -1,10 +1,10 @@
 //Please update your database info here
 var mysql = require("mysql")
 var db_config = {
-	host	: 'p1us8ottbqwio8hv.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-	user	: 'cpfj0qoqkan4uwgq',
-	password: '1997.piogex7okldf7qaz',
-	database: 'iotminds'
+	host	: '127.0.0.1',
+	user	: 'root',
+	password: 'lala',
+	database: 'iot2'
 }
 
 var connection

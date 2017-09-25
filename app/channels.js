@@ -2,7 +2,7 @@ var express = require("express")
 var router = express.Router()
 var db = require("../config/db.js")
 var crypto = require("crypto")
-
+var utilities = require("./utilities.js")
 
 router.get("/new",isLoggedIn,function (req,res) {
 	res.render("create_channel.ejs")
@@ -26,7 +26,7 @@ router.post("/new",isLoggedIn,function (req,res) {
 router.get("/delete",isLoggedIn,function (req,res) {
 	var id = req.query.id
 
-	db.query("DELETE FROM datas WHERE channel_id = ? ",[id],function (err,result) {
+	db.query("DELETE FROM data WHERE channel_id = ? ",[id],function (err,result) {
 		if (err) {
 			res.json({code:400,message:"DB_ERROR_here"})
 		}else{
@@ -57,42 +57,30 @@ router.get("/delete",isLoggedIn,function (req,res) {
 router.get("/:channel_id",function (req,res) {
 	var channel_id = req.params.channel_id
 	var name
-	var datas
-	db.query("SELECT * FROM channels WHERE id=?",[channel_id],function (err,result) {
-		if(err){
-			res.json({code:400,message:"DB_ERROR"})
-		}else{
-			if(result.length>0){
-				name=result[0].name
-				created_at=result[0].created_at		
-				db.query("SELECT * FROM datas WHERE channel_id=?",[channel_id],function (err,result) {
-					if (err) {
-						res.json({code:400,message:"DB_ERROR"})
-					}else{
-						datas = result
-					}
-				})
+	var data
 
-				db.query("SELECT * FROM components WHERE channel_id=?",[channel_id],function (err,result) {
-					if(err){
-						res.json({code:400,message:"DB_ERROR"})
-					}else{
-						res.render("channel.ejs",{
-							components : result,
-							channel_id : channel_id,
-							created_at: created_at,
-							channel_name : name,
-							datas : datas
-						})
-					}
-				})
+	db.query("SELECT * FROM channels WHERE id=?",[channel_id],function (err,result) { /* TODO: refactor this */
+		if(err)
+			return utilities.printError(res, err)
 
-			}else{
-				res.json({code:404,message:"CHANNEL_NOT_FOUND"})
-				return
+		if(!result || result.length == 0)
+			return utilities.printError(res, "No such channel")
 
-			}
-		}
+		name=result[0].name
+		created_at=result[0].created_at
+
+		utilities.getComponents(channel_id, function(err, result){
+			if (err)
+				return utilities.printError(res, err)
+
+			res.render("channel.ejs",{
+				components : result,
+				channel_id : channel_id,
+				created_at: created_at,
+				channel_name : name,
+				data : data
+			})
+		})
 	})
 })
 
@@ -107,7 +95,7 @@ router.post("/:channel_id/new_component",isLoggedIn,function (req,res) {
 	var channel_id = req.params.channel_id
 	var component_name = req.body.name
 	var type = req.body.type
-	var api_key = crypto.randomBytes(16).toString('hex')
+	var api_key = crypto.randomBytes(8).toString('hex')
 
 	db.query("INSERT INTO components (channel_id,name,created_at,last_updated,api_key,type) VALUES(?,?,NOW(),NOW(),?,?)",[channel_id,component_name,api_key,type],function (err,result) {
 		if (err) {
@@ -129,16 +117,13 @@ router.post("/:channel_id/new_component",isLoggedIn,function (req,res) {
 
 router.get("/components/:component_id",function (req,res) {
 	var component_id = req.params.component_id
-	db.query("SELECT value FROM datas WHERE component_id = ?",[component_id],function (err,result) {
-		if(err){
-			res.json(err)
-		}else{
-			var dataset = []
-			for (var i = 0; i < result.length; i++) {
-				dataset.push(result[i].value)
-			}
-			res.json(dataset)
-		}
+
+	utilities.getComponentData(component_id, function(err, result)
+	{
+		if(err)
+			return utilities.printError(res, err)
+
+		res.json(result.map(function(t){return t.value;}));
 	})
 })
 
@@ -152,7 +137,7 @@ router.get("/components/delete/:component_id",isLoggedIn,function (req,res) {
 			channel_id=result[0].channel_id
 		}
 	})
-	db.query("DELETE FROM datas WHERE component_id=?",[component_id],function (err,result) {
+	db.query("DELETE FROM data WHERE component_id=?",[component_id],function (err,result) {
 		if(err){
 			res.json(err)
 		}else{

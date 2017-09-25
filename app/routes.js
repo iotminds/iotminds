@@ -1,3 +1,5 @@
+var utilities = require("./utilities.js")
+
 // app/routes.js
 module.exports = function(app, passport) {
 	var db = require('../config/db.js')
@@ -59,18 +61,16 @@ module.exports = function(app, passport) {
 	// we will want this protected so you have to be logged in to visit
 	// we will use route middleware to verify this (the isLoggedIn function)
 	app.get('/profile', isLoggedIn, function(req, res) {
-		db.query("SELECT * FROM channels WHERE owner_id=?",[req.user.id],function (err,result) {
-			if (err) {
-				return err
-			}else{
-				res.render('profile.ejs', {
-				user : req.user,
-				channels : result
-		});
-			}
-		})
+		utilities.getChannels(req.user.id, function(err, result) {
+            if (err)
+                return err
 
-	});
+            res.render('profile.ejs', {
+                user: req.user,
+                channels: result
+            })
+        })
+	})
 
 	// =====================================
 	// LOGOUT ==============================

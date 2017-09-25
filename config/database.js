@@ -1,10 +1,10 @@
 // config/database.js
 module.exports = {
     'connection': {
-        'host': 'p1us8ottbqwio8hv.cbetxkdyhwsb.us-east-1.rds.amazonaws.com	',
-        'user': 'cpfj0qoqkan4uwgq',
-        'password': 'piogex7okldf7qaz'
+        'host': '127.0.0.1',
+        'user': 'root',
+        'password': 'lala'
     },
-	'database': 'iotminds',
+	'database': 'iot2',
     'users_table': 'users'
 };
