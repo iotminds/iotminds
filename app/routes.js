@@ -82,9 +82,9 @@ module.exports = function(app, passport) {
 	app.get("/docs",function (req,res) {
 		res.render("documentation")
 	})
-	app.get("/support",function (req,res) {
+	/*app.get("/support",function (req,res) {
 		res.render("support")
-	})
+	})*/
 	app.get("/*",function (req,res) {
 		res.render("404")
 	})
