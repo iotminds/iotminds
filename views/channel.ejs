@@ -2,11 +2,13 @@
 <!doctype html>
 <html>
 <head>
-	<title>IoT Minds Channssel</title>
+	<title>IoT Minds Channel</title>
+    <% include header %>
 	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js" />
 	<script type="text/javascript" src="/js/chart_controller.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
     	<header class="header">
@@ -76,7 +78,7 @@
 
 					<div id="create_component" class="tab-pane fade">
 						<div class="col-sm-6 col-sm-offset-3">
-							<p><span class="fa fa-sign-in"></span> Create a nesssadasdw Component</p>
+							<p><span class="fa fa-sign-in"></span> Create a new Component</p>
 							<form action="/channels/<%= channel_id%>/new_component" method="post">
 								<div class="form-group">
 									<label>Component Name</label>
