@@ -107,7 +107,36 @@ router.get("/new_channel", function (req, res)
 })
 
 router.get("/new_component", function (req, res) {
+    var key = req.query.key
 
+    console.log(key)
+    console.log(req.query.channel_id)
+    console.log(req.query.name)
+    console.log(req.query.type)
+
+    if(!key || !req.query.channel_id || !req.query.name || !req.query.type)
+        return utilities.printError(res, "Invalid arguments")
+
+    utilities.executeWithKey(key, utilities.accessConstants.COMPONENT_CREATE, function(err, key_info)
+    {
+        if(err)
+            return utilities.printError(res, err)
+        
+        utilities.createComponent(
+            {
+                name: req.query.name,
+                type: req.query.type,
+                channel_id: req.query.channel_id,
+                user_id: key_info.user_id,
+            },
+            function (err, component) {
+                if (err)
+                    return utilities.printError(res, err)
+
+                utilities.printSuccess(res, component)
+            }
+        )
+    })
 })
 
 router.get("/delete_channel", function(req, res)

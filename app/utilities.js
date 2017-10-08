@@ -1,17 +1,22 @@
 var db = require("../config/db.js")
+var crypto = require("crypto")
 
 exports.accessConstants =
     {
         COMPONENT_READ: 1,
-        COMPONENT_WRITE: 2,
-        COMPONENT_LIST: 4,
-        COMPONENT_CREATE: 8,
-        COMPONENT_REMOVE: 16,
-        CHANNEL_READ: 32,
-        CHANNEL_MODIFY: 64,
-        CHANNEL_LIST: 128,
-        CHANNEL_CREATE: 256,
-        CHANNEL_REMOVE: 512
+        COMPONENT_READ_ANY: 2,
+        COMPONENT_WRITE: 4,
+        COMPONENT_WRITE_ANY: 8,
+        COMPONENT_LIST: 16,
+        COMPONENT_CREATE: 32,
+        COMPONENT_REMOVE: 64,
+		CHANNEL_READ: 128,
+        CHANNEL_READ_ANY: 256,
+		CHANNEL_MODIFY: 512,
+        CHANNEL_MODIFY_ANY: 1024,
+        CHANNEL_LIST: 2048,
+        CHANNEL_CREATE: 4096,
+        CHANNEL_REMOVE: 8192
     }
 
 exports.getKeyInfo = function(key, callback)
@@ -97,14 +102,30 @@ exports.createChannel = function(channel_object, callback)
 
 exports.createComponent = function(component_object, callback)
 {
-    db.query("INSERT INTO components (channel_id, name, type, created_at, last_updated) VALUES (?, ?, ?, NOW(), NOW())",
+    var key = crypto.randomBytes(8).toString('hex')
+
+    db.query("INSERT INTO components (channel_id, name, type, created_at, last_updated, api_key) VALUES (?, ?, ?, NOW(), NOW(), ?)",
         [
             component_object.channel_id,
             component_object.name,
-            component_object.type
+            component_object.type,
+			key
         ],
         function (err, res) {
-            callback(err, res.insertId)
+    		if(err)
+    			return callback(err)
+
+    		db.query("INSERT INTO api_keys (api_key, secret, access, user_id, component_id, channel_id) VALUES (?, '0000000000000000', ?, ?, ?, ?)",
+				[
+					key,
+					exports.accessConstants.COMPONENT_READ | exports.accessConstants.COMPONENT_WRITE,
+					component_object.user_id,
+					component_object.channel_id,
+					res.insertId
+				],
+				function(err2, res2) {
+    				callback(err2, { id: res.insertId, key: key })
+				})
         })
 }
 
