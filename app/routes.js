@@ -72,6 +72,36 @@ module.exports = function(app, passport) {
         })
 	})
 
+	app.get('/channels/:channel_id',function (req,res) {
+	var channel_id = req.params.channel_id
+	var name
+	var data
+
+	db.query("SELECT * FROM channels WHERE id=?",[channel_id],function (err,result) { 
+		if(err)
+			return utilities.printError(res, err)
+
+		if(!result || result.length == 0)
+			return utilities.printError(res, "No such channel")
+
+		name=result[0].name
+		created_at=result[0].created_at
+
+		utilities.getComponents(channel_id, function(err, result){
+			if (err)
+				return utilities.printError(res, err)
+
+			res.render("channel",{
+				components : result,
+				channel_id : channel_id,
+				created_at: created_at,
+				channel_name : name,
+				data : data
+			})
+		})
+	})
+	})
+
 	// =====================================
 	// LOGOUT ==============================
 	// =====================================

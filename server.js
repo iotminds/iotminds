@@ -31,6 +31,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.set('view engine', 'ejs'); // set up ejs for templating
+app.use(express.static(path.join(__dirname, 'public')));
 
 // required for passport
 app.use(session({
@@ -44,7 +45,6 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 app.use("/channels/",require("./app/channels.js"))
 app.use("/api/",require("./app/api.js"))
 
-app.use(express.static(path.join(__dirname, 'public')));
 
 // routes ======================================================================
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport

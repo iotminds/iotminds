@@ -2,168 +2,158 @@
 <!doctype html>
 <html>
 <head>
-	<title>IoT Minds Channel</title>
-    <% include header %>
-	
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js" />
-	<script type="text/javascript" src="/js/chart_controller.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>IoT Minds Channel</title>
+     <%include header%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js" />
+    <script type="text/javascript" src="/js/chart_controller.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-    	<header class="header">
-    		<div role="navigation" class="navbar navbar-default navbar-fixed-top">
-    			<div class="container">
-    				<div class="navbar-header"><a href="#all" class="navbar-brand scroll-to"><img src="img/logo.png" alt="logo" class="hidden-xs hidden-sm"><img src="img/logo-small.png" alt="logo" class="visible-xs visible-sm"><span class="sr-only">Go to homepage</span></a>
-    					<div class="navbar-buttons">
-    						<button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle navbar-btn">Menu<i class="pe-7s-menu"></i></button>
-    					</div>
-    				</div>
-    				<div id="navigation" class="collapse navbar-collapse navbar-left">
-    					<ul class="nav navbar-nav">
-    						<li><a href="/profile" class="scroll-to">Profile </a></li>
-    						<li><a href="/docs" class="scroll-to">Documentation </a></li>
-    						<li><a href="/channels/featured" class="scroll-to">Featured Channels </a></li>
-    						<li><a href="/examples" class="scroll-to">Examples </a></li>
-    						<!--<li><a href="#integrations" class="scroll-to">Integrations</a></li>
-    						<li><a href="#testimonials" class="scroll-to">Testimonials</a></li>
-    						<li><a href="#contact" class="scroll-to">Contact</a></li>-->
-    					</ul>
-    				</div>
-    				<div id="navigation" class="collapse navbar-collapse navbar-right">
-    					<a href="/logout" class="btn navbar-btn btn-ghost">Logout</a>
-    				</div>
-    			</div>
-    		</div>
-    	</header>
-		<div class="container">
-			<div class="row">
-				<!-- HEADER -->
-				<div style="padding-top: 10px;" class="col-sm-12">
-					<div style="padding-top: 5px; padding-bottom: 25px;" align="center" class="well">
-						<p><%= channel_name %></p>
-						<p>Channel ID: <span><%= channel_id%></span></p>
-						<h5>Created At: <span><%= created_at%></span></h5>
-					</div>
-				</div>
-				<div class="col-sm-12">
-					<ul class="nav nav-tabs">
-						<li class="active"><a data-toggle="tab" href="#home">Dashboard</a></li>
-						<li><a data-toggle="tab" href="#create_component">Create New Component</a></li>
-						<!--<li><a data-toggle="tab" href="#statistics">Statistics</a></li>-->
-						<li><a data-toggle="tab" href="#manage">Manage</a></li>
-					</ul>
-				</div>
-				<div class="tab-content">
-					<!--CHANNEL LISTING-->
-					<div id="home" class="tab-pane fade in active">
-						<div style="margin-top: 25px;" class="col-sm-12">
-							<% if(components[0]==null){%>
-								<h5>You can add new component to your channel by using "Create New Component" tab</h5>
-							<%}%>
-							<% components.forEach(function(component){ %>
-							<div class="col-md-4">
-								<div class="thumbnail">
-									<canvas id="<%=component.id%>"></canvas>
-									<div class="caption">
-										<h3><%= component.name %></h3>
-										<h2><%= component.type %></h2>
-										<h5>API Key : <%= component.api_key %></h5>
-									</div>
-								</div>
-							</div>
-							<% }); %>
-						</div>						
-					</div>
+    <header class="header">
+        <div role="navigation" class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header"><a href="#all" class="navbar-brand scroll-to"><img src="http://localhost:8080/img/logo.png" alt="logo" class="hidden-xs hidden-sm"><img src="http://localhost:8080/img/logo-small.png" alt="logo" class="visible-xs visible-sm"><span class="sr-only">Go to homepage</span></a>
+                    <div class="navbar-buttons">
+                        <button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle navbar-btn">Menu<i class="pe-7s-menu"></i></button>
+                    </div>
+                </div>
+                <div id="navigation" class="collapse navbar-collapse navbar-left">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/profile" class="scroll-to">Profile </a></li>
+                        <li><a href="/docs" class="scroll-to">Documentation </a></li>
+                        <li><a href="/channels/featured" class="scroll-to">Featured Channels </a></li>
+                        <li><a href="/examples" class="scroll-to">Examples </a></li>
+                            <!--<li><a href="#integrations" class="scroll-to">Integrations</a></li>
+                            <li><a href="#testimonials" class="scroll-to">Testimonials</a></li>
+                            <li><a href="#contact" class="scroll-to">Contact</a></li>-->
+                        </ul>
+                    </div>
+                    <div id="navigation" class="collapse navbar-collapse navbar-right">
+                        <a href="/logout" class="btn navbar-btn btn-ghost">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="container">
+            <div class="row">
+                <!-- HEADER -->
+                <div style="padding-top: 10px;" class="col-sm-12">
+                    <div style="padding-top: 5px; padding-bottom: 25px;" align="center" class="well">
+                        <p><%= channel_name %></p>
+                        <p>Channel ID: <span><%= channel_id%></span></p>
+                        <h5>Created At: <span><%= created_at%></span></h5>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#home">Dashboard</a></li>
+                        <li><a data-toggle="tab" href="#create_component">Create New Component</a></li>
+                        <!--<li><a data-toggle="tab" href="#statistics">Statistics</a></li>-->
+                        <li><a data-toggle="tab" href="#manage">Manage</a></li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <!--CHANNEL LISTING-->
+                    <div id="home" class="tab-pane fade in active">
+                        <div style="margin-top: 25px;" class="col-sm-12">
+                            <% if(components[0]==null){%>
+                            <h5>You can add new component to your channel by using "Create New Component" tab</h5>
+                            <%}%>
+                            <% components.forEach(function(component){ %>
+                            <div class="col-md-4">
+                                <div class="thumbnail">
+                                    <canvas id="<%=component.id%>"></canvas>
+                                    <div class="caption">
+                                        <h3><%= component.name %></h3>
+                                        <h2><%= component.type %></h2>
+                                        <h5>API Key : <%= component.api_key %></h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }); %>
+                        </div>                      
+                    </div>
 
-					<div id="create_component" class="tab-pane fade">
-						<div class="col-sm-6 col-sm-offset-3">
-							<p><span class="fa fa-sign-in"></span> Create a new Component</p>
-							<form action="/channels/<%= channel_id%>/new_component" method="post">
-								<div class="form-group">
-									<label>Component Name</label>
-									<input type="text" class="form-control" name="name">
-								</div>
-								<div class="form-group">
-									<label>Visualization Type</label>
-									<select class="form-control" name="type">
-										<option value="line" > Line</option>
-										<option value="bar"> Bar</option>
-										<option value="radar"> Radar</option>
-									</select>
-								</div>
-								<button name="submit" type="submit" class="btn btn-success btn-lg">Create</button>
-							</form>
-							<hr>
-						</div>
-					</div>
-					<!--
-					<div id="statistics" class="tab-pane fade">
-						Statistics is going here please wait
-						<p>
-							Total Entries : 1231231123
-							Last Updated : 12/2/2017
-						</p>
-					</div>
-					-->
-					<div id="manage" class="tab-pane fade">
-						<table class="table">
-							<thead>
-								<tr>
-									<th> Component Name </th>
-									<th> API Key </th>
-									<th> Manage</th>
-								</tr>
-							</thead>
-							<tbody>
-								<% components.forEach(function(component){%>
+                    <div id="create_component" class="tab-pane fade">
+                        <div class="col-sm-6 col-sm-offset-3">
+                            <p><span class="fa fa-sign-in"></span> Create a new Component</p>
+                            <form action="/channels/<%= channel_id%>/new_component" method="post">
+                                <div class="form-group">
+                                    <label>Component Name</label>
+                                    <input type="text" class="form-control" name="name">
+                                </div>
+                                <div class="form-group">
+                                    <label>Visualization Type</label>
+                                    <select class="form-control" name="type">
+                                        <option value="line" > Line</option>
+                                        <option value="bar"> Bar</option>
+                                        <option value="radar"> Radar</option>
+                                    </select>
+                                </div>
+                                <button name="submit" type="submit" class="btn btn-success btn-lg">Create</button>
+                            </form>
+                            <hr>
+                        </div>
+                    </div>
+                <div id="manage" class="tab-pane fade">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th> Component Name </th>
+                                <th> API Key </th>
+                                <th> Manage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% components.forEach(function(component){%>
 
-								<tr>
-									<td><%=component.name%></td>
-									<td><%=component.api_key%></td>
-									<td align="center">
-										<a class="btn btn-success btn-disabled" href="/channels/regenerate/<%=component.id%>">Regenerate new api key</a>
-										<a class="btn btn-danger" href="/channels/components/delete/<%= component.id %>">Delete</a>
-									</td>
-								</tr>
+                            <tr>
+                                <td><%=component.name%></td>
+                                <td><%=component.api_key%></td>
+                                <td align="center">
+                                    <a class="btn btn-success btn-disabled" href="/channels/regenerate/<%=component.id%>">Regenerate new api key</a>
+                                    <a class="btn btn-danger" href="/channels/components/delete/<%= component.id %>">Delete</a>
+                                </td>
+                            </tr>
 
-								<% }) %>
-							</tbody>
-						</table>
-					</div>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
 
-					<script type="text/javascript">
-						<% components.forEach(function (component) { %>
-							var tmp
-							$.ajax({
-								'async': false,
-								'url': "http://localhost:8080/channels/components/<%=component.id%>",
-								'type': "GET",
-								'success': function (data) {
-									tmp = data
-								}
-							})
+                <script type="text/javascript">
+                    <% components.forEach(function (component) { %>
+                        var tmp
+                        $.ajax({
+                            'async': false,
+                            'url': "http://localhost:8080/channels/components/<%=component.id%>",
+                            'type': "GET",
+                            'success': function (data) {
+                                tmp = data
+                            }
+                        })
 
-							var chartData = {
-								type: "<%=component.type%>",
-								data:{
-									labels: tmp,
-									datasets:[{
-										data : tmp,
-										label : "<%=component.name%>",
-										borderColor: "rgba(54, 162, 235, 0.4)",
-										backgroundColor : "rgba(54, 162, 235, 0.2)"
-									}]
+                        var chartData = {
+                            type: "<%=component.type%>",
+                            data:{
+                                labels: tmp,
+                                datasets:[{
+                                    data : tmp,
+                                    label : "<%=component.name%>",
+                                    borderColor: "rgba(54, 162, 235, 0.4)",
+                                    backgroundColor : "rgba(54, 162, 235, 0.2)"
+                                }]
 
-								}
-							}
-							var ctx = document.getElementById("<%=component.id%>").getContext('2d')
-							var chartArea = new Chart(ctx,chartData)
+                            }
+                        }
+                        var ctx = document.getElementById("<%=component.id%>").getContext('2d')
+                        var chartArea = new Chart(ctx,chartData)
 
-							<%})%>
+                        <%})%>
 
-						</script>
+                    </script>
 
-					</div>
-				</body>
-				</html>
+                </div>
+            </body>
+            </html>
