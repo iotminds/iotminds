@@ -53,7 +53,7 @@ router.post("/new",isLoggedIn,function (req,res) {
                 channel_name: req.body.channel_name,
                 channel_description: req.body.channel_description,
                 image_url: req.body.img_url,
-                owner_id: req.user_id
+                owner_id: req.user.id
             },
             function(err, id)
             {
@@ -62,7 +62,8 @@ router.post("/new",isLoggedIn,function (req,res) {
                     return utilities.printError(res, err)
                 }
 
-                utilities.printSuccess(res, {channel_id: id})
+                //utilities.printSuccess(res, {channel_id: id})
+				res.redirect("/channels/" + id)
             }
         )
 })
@@ -109,24 +110,20 @@ router.post("/:channel_id/new_component",isLoggedIn,function (req,res) {
 	var channel_id = req.params.channel_id
 	var component_name = req.body.name
 	var type = req.body.type
-	var api_key = crypto.randomBytes(8).toString('hex')
 
-	db.query("INSERT INTO components (channel_id,name,created_at,last_updated,api_key,type) VALUES(?,?,NOW(),NOW(),?,?)",[channel_id,component_name,api_key,type],function (err,result) {
-		if (err) {
-			res.json(err)
-		}else{
-			var component_id = result.insertId
-			var owner_id = req.user.id
-			db.query("INSERT INTO api_keys (api_key,owner_id,component_id,channel_id) VALUES(?,?,?,?)",[api_key,owner_id,component_id,channel_id],function (err,result) {
-				if(err){
-					res.json({code:400,message:"DB_ERROR"})
-				}else{
-					res.redirect("/channels/"+channel_id)					
-				}
-			})
+	utilities.createComponent(
+		{
+			channel_id: req.params.channel_id,
+			name: req.body.name,
+			type: req.body.type
+		},
+		function (err, id) {
+			if(err)
+				return utilities.printError(res, err)
+
+			res.redirect("/channels/" + channel_id)
 		}
-	})
-
+	)
 })
 
 router.get("/components/:component_id",function (req,res) {
@@ -138,6 +135,7 @@ router.get("/components/:component_id",function (req,res) {
 			return utilities.printError(res, err)
 
 		res.json(result.map(function(t){return t.value;}));
+		//res.json({data: result})
 	})
 })
 
@@ -169,8 +167,10 @@ router.get("/components/delete/:component_id",isLoggedIn,function (req,res) {
 })
 
 router.get("/regenerate/:component_id",isLoggedIn,function (req,res) {
+	// TODO: fix this
+
 	var component_id = req.params.component_id
-	var new_api_key = crypto.randomBytes(16).toString('hex')
+	var new_api_key = crypto.randomBytes(8).toString('hex')
 
 	db.query("UPDATE api_keys SET api_key=? WHERE component_id=?",[new_api_key,component_id],function (err,result) {
 		if(err){

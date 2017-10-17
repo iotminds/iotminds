@@ -95,6 +95,9 @@ exports.createChannel = function(channel_object, callback)
         ],
         function (err, res)
         {
+            if(err)
+                return callback(err)
+
             callback(err, res.insertId)
         }
     )
@@ -120,8 +123,8 @@ exports.createComponent = function(component_object, callback)
 					key,
 					exports.accessConstants.COMPONENT_READ | exports.accessConstants.COMPONENT_WRITE,
 					component_object.user_id,
-					component_object.channel_id,
-					res.insertId
+                    res.insertId,
+					component_object.channel_id
 				],
 				function(err2, res2) {
     				callback(err2, { id: res.insertId, key: key })
